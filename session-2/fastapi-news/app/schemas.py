@@ -31,7 +31,7 @@ class Reporter(ReporterBase):
 
 class PublisherBase(BaseModel):
     name: str
-    email: str
+    email: Optional[str] = None
     website: Optional[str] = None
 
 class PublisherCreate(PublisherBase):

@@ -15,9 +15,11 @@ class News(Base):
     reporter_id = Column(Integer, ForeignKey('reporters.id'))
     publisher_id = Column(Integer, ForeignKey('publishers.id'))
 
-    category = relationship("Category")
-    reporter = relationship("Reporter")
-    publisher = relationship("Publisher")
+    category = relationship("Category", lazy='joined')
+    reporter = relationship("Reporter", lazy='joined')
+    publisher = relationship("Publisher", lazy='joined')
+    images = relationship("Image", back_populates="news")
+    summaries = relationship("Summary", back_populates="news")
 
     # @property
     # def category_name(self):
@@ -56,10 +58,12 @@ class Image(Base):
     news_id = Column(Integer, ForeignKey('news.id'))
     url = Column(String)
 
-    news = relationship("News")
+    news = relationship("News", back_populates="images")
 
 class Summary(Base):
     __tablename__ = "summaries"
     id = Column(Integer, primary_key=True, index=True)
     news_id = Column(Integer, ForeignKey('news.id'))
     summary_text = Column(Text)
+    
+    news = relationship("News", back_populates="summaries")

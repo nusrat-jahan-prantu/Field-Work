@@ -12,15 +12,16 @@ def single_news_scraper(url: str):
 
         publisher_website = url.split('/')[2]
         publisher = publisher_website.split('.')[-2]
-        title = response.html.find('h1', first=True).text
-        reporter = response.html.find('.contributor-name', first=True).text
-        datetime_element = response.html.find('time', first=True)
-        news_datetime = datetime_element.attrs['datetime']
-        category = response.html.find('.print-entity-section-wrapper', first=True).text
+        title = response.html.find('article h1', first=True).text
+        reporter = response.html.find('footer h4', first=True).text
+        # reporter = response.html.find('.contributor-name', first=True).text
+        datetime_text = response.html.find('time', first=True).text
+        # news_datetime = datetime_element.attrs['datetime']
+        category = "POLITICS" #response.html.find('.print-entity-section-wrapper', first=True).text
         content = '\n'.join([p.text for p in response.html.find('p')])
         img_tags = response.html.find('img')
         images = [img.attrs['src'] for img in img_tags if 'src' in img.attrs]
-        news_datetime = datetime.datetime.now()
+        news_datetime =  datetime.datetime.strptime(datetime_text, '%b %d, %Y %H:%M')
 
         print(f"Scraped news from {url}")
         print(f"Title: {title}")
